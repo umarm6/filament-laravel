@@ -22,8 +22,6 @@ class ProductsTable
                 TextColumn::make('color.name')->label('Color')->sortable()->searchable(),
                 TextColumn::make('created_at')->label('Created At')->sortable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')->label('Updated At')->sortable()->toggleable(isToggledHiddenByDefault: true),
-
-
             ])
             ->filters([
                 //
