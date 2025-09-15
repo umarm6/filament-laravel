@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_assignments', function (Blueprint $table) {
+        Schema::create('typeables', function (Blueprint $table) {
             $table->id();
-            $table->string('type_assignment_type');
-            $table->integer('type_assigment_id');
-            $table->string('my_bonus_filed');
-            $table->integer('type_id');
+            $table->foreignId('product_type_id')->constrained('product_types')->onDelete('restrict');
+            $table->morphs('typeable');
             $table->timestamps();
-
-            $table->foreign('type_id')->references('id')->on('type');
-
         });
     }
 
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_assigments');
+        Schema::dropIfExists('typeables');
     }
 };

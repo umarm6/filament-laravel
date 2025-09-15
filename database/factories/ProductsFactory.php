@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\ProductCategories;
+use App\Models\ProductColors;
 use App\Models\Products;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -12,10 +14,10 @@ class ProductsFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->firstName(),
-            'description' => fake()->paragraph(),
-            'product_category_id' => fake()->randomElement([1,2,3]),
-            'product_color_id' => fake()->randomElement([1,2,3]),
-        ];
+            'product_category_id' => ProductCategories::factory(),
+            'name' => $this->faker->words(4, true),
+            'description' => $this->faker->paragraph(),
+            'product_color_id' => ProductColors::factory(),
+         ];
     }
 }

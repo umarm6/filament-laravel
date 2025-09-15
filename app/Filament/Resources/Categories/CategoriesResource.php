@@ -2,14 +2,12 @@
 
 namespace App\Filament\Resources\Categories;
 
-use App\Filament\Resources\Categories\Pages\CreateCategories;
-use App\Filament\Resources\Categories\Pages\EditCategories;
 use App\Filament\Resources\Categories\Pages\ListCategories;
 use App\Filament\Resources\Categories\Schemas\CategoriesForm;
 use App\Filament\Resources\Categories\Tables\CategoriesTable;
-use App\Models\Categories;
 use App\Models\ProductCategories;
 use BackedEnum;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -23,6 +21,17 @@ class CategoriesResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Categories';
     protected static ?string $navigationLabel = 'Categories';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 0 ? 'primary' : 'info';
+    }
+
 
     public static function form(Schema $schema): Schema
     {
@@ -45,8 +54,37 @@ class CategoriesResource extends Resource
     {
         return [
             'index' => ListCategories::route('/'),
-            'create' => CreateCategories::route('/create'),
-            'edit' => EditCategories::route('/{record}/edit'),
-        ];
+          ];
+    }
+
+     public static function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextEntry::make('name')
+                    ->label('Category Name')
+                    ->weight('bold'),
+                TextEntry::make('description')->placeholder('No description.'),
+                TextEntry::make('external_url')
+                    ->visible(fn($record) => !empty($record->external_url))
+                    ->label('External URL')
+                    ->formatStateUsing(
+                        fn($state) => $state
+                            ? '<a href="' . e($state) . '" target="_blank" class="text-primary-600 underline">' . e($state) . '</a>'
+                            : ''
+                    )
+                    ->html(),
+                TextEntry::make('productTypes.name')
+                    ->label('Product Types')
+                    ->listWithLineBreaks()
+                    ->badge()
+                    ->color('success'),
+
+                TextEntry::make('products_count')
+                    ->label('Products Count')
+                    ->formatStateUsing(fn($record) => $record->products()->count())
+                    ->badge(),
+            ])
+             ->columns(1);
     }
 }

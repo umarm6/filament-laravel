@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  *
@@ -31,5 +32,13 @@ class Products extends Model
     {
         return  $this->belongsTo(ProductCategories::class,'product_category_id','id');
     }
+
+
+    public function types(): MorphToMany
+    {
+        return $this->morphToMany(ProductType::class, 'typeable');
+    }
+
+
 
 }
