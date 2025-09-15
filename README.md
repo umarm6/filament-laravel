@@ -60,6 +60,8 @@
 
 git  clone  https://github.com/umarm6/filament-laravel
 
+git checkout development
+
 cd  filament-laravel
 
 ```
